@@ -39,23 +39,39 @@
         }
       });
       var Campaign = React.createClass({
+        getInitialState: function() {
+          return {detailedDisplay: "false",
+                  campaign: {},
+                  rewards: [],
+                  comments: []}
+        },
         campaignGotClicked: function() {
           $.ajax({
             method: "GET",
             url: "http://localhost:3000/campaigns/" + this.props.id + ".json",
             success: function(data) {
               console.log(data);
+              console.log(data.campaign);
+              console.log(data.campaign.title);
+              console.log(data.rewards[0]);
+              console.log(data.rewards[0].description);
+              this.setState({detailedDisplay: "true",
+                             campaign: data.campaign, 
+                             rewards: data.rewards,
+                             comments: data.comments});
             }.bind(this)
           });
         },
         render: function(){
+          var rewardTags = this.state.rewards.map(function(rewardObj){
+                              return <Reward description={rewardObj.description} amount={rewardObj.amount} />
+                            });
           return  <div>
                     <h2>
                       <a id={this.props.id} href="javascript:void(0);" onClick={this.campaignGotClicked}>
                         {this.props.title}
                       </a>
-                      <Reward description="You get a medal!"/>
-                      <Reward description="You get a car!"/>
+                      {rewardTags}
                     </h2>
                     <hr />
                   </div>
@@ -65,7 +81,7 @@
         render: function() {
           return  <div>
                     <p>
-                      {this.props.description}
+                      Reward: {this.props.description} for ${this.props.amount}
                     </p>
                   </div>
         }
