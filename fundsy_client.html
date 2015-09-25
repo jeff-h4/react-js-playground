@@ -24,7 +24,8 @@
             }.bind(this)
           });
         },
-
+        displaySpecificCampaign: function(id) {
+        };
         render: function() {
           var spinnerStyleDisplay = this.state.showSpinner ? "block" : "none";
           var spinnerStyle        = {display: spinnerStyleDisplay};
@@ -50,11 +51,6 @@
             method: "GET",
             url: "http://localhost:3000/campaigns/" + this.props.id + ".json",
             success: function(data) {
-              console.log(data);
-              console.log(data.campaign);
-              console.log(data.campaign.title);
-              console.log(data.rewards[0]);
-              console.log(data.rewards[0].description);
               this.setState({detailedDisplay: "true",
                              campaign: data.campaign, 
                              rewards: data.rewards,
