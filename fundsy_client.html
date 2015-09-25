@@ -66,13 +66,17 @@
           var rewardTags = this.state.rewards.map(function(rewardObj){
                               return <Reward description={rewardObj.description} amount={rewardObj.amount} />
                             });
+          var commentTags = this.state.comments.map(function(commentObj){
+                              return <Comment body={commentObj.body} />
+                            });
           return  <div>
                     <h2>
                       <a id={this.props.id} href="javascript:void(0);" onClick={this.campaignGotClicked}>
                         {this.props.title}
                       </a>
-                      {rewardTags}
                     </h2>
+                    {rewardTags}
+                    {commentTags}
                     <hr />
                   </div>
         }
@@ -83,6 +87,13 @@
                     <p>
                       Reward: {this.props.description} for ${this.props.amount}
                     </p>
+                  </div>
+        }
+      });
+      var Comment = React.createClass({
+        render: function() {
+          return  <div>
+                      Comment: {this.props.body}
                   </div>
         }
       });
