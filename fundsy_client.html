@@ -11,7 +11,8 @@
     <div id="container"></div>
     <script type="text/jsx">
       var CampaignsContainer = React.createClass({
-        getInitialState : function() {
+
+        getInitialState: function() {
           return {showSpinner: true, campaigns: []};
         },
         componentDidMount: function() {
@@ -23,11 +24,12 @@
             }.bind(this)
           });
         },
+
         render: function() {
           var spinnerStyleDisplay = this.state.showSpinner ? "block" : "none";
           var spinnerStyle        = {display: spinnerStyleDisplay};
           var campaigns           = this.state.campaigns.map(function(c) {
-                                      return <Campaign title={c.title} />
+                                      return <Campaign id={c.id} title={c.title} />
                                     }.bind(this));
           return  <div>
                     <h1>Welcome to Fundsy</h1>
@@ -37,10 +39,34 @@
         }
       });
       var Campaign = React.createClass({
+        campaignGotClicked: function() {
+          $.ajax({
+            method: "GET",
+            url: "http://localhost:3000/campaigns/" + this.props.id + ".json",
+            success: function(data) {
+              console.log(data);
+            }.bind(this)
+          });
+        },
+        render: function(){
+          return  <div>
+                    <h2>
+                      <a id={this.props.id} href="javascript:void(0);" onClick={this.campaignGotClicked}>
+                        {this.props.title}
+                      </a>
+                      <Reward description="You get a medal!"/>
+                      <Reward description="You get a car!"/>
+                    </h2>
+                    <hr />
+                  </div>
+        }
+      });
+      var Reward = React.createClass({
         render: function() {
           return  <div>
-                    <h2>{this.props.title}</h2>
-                    <hr />
+                    <p>
+                      {this.props.description}
+                    </p>
                   </div>
         }
       });
