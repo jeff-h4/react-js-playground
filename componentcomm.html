@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset 'utf8'>
+    <script src="react.js"></script>
+    <script src="JSXTransformer.js"></script>
+    <title>React.js Playground</title>
+  </head>
+  <body>
+    <h1>Welcome to the React.js Playground</h1> 
+    <div id="circlecontainer"></div>
+    <script type="text/jsx">
+      var CircleContainer = React.createClass({
+        getInitialState: function() {
+          return {clickCount: 0};
+        },
+        //This function should actually be called from the Circle
+        updateClickCount: function(number) {
+          var newClickCount = this.state.clickCount + number;
+          this.setState({clickCount: newClickCount});
+        },
+        render: function() {
+          var styles       = {width: "200px", height: "200px", backgroundColor: "red"};
+          var circleColors = this.props.myCircleColours;
+          var circleTags   = circleColors.map(function(color) {
+                                return <Circle myWidth="20px" 
+                                              myHeight="20px" 
+                                              myBgColour={color} 
+                                              updateClickCount={this.updateClickCount}/>;
+                             }.bind(this));
+          return <div style={styles}>
+                   The circle container is here
+                   {circleTags}
+                 </div>;
+        }
+      });
+
+      var Circle = React.createClass({
+        render: function() {
+          var circleColours = ["white","blue","orange","teal","magenta","black","grey"];
+          var styles = {
+                        borderRadius: "50%",
+                        width: this.props.myWidth,
+                        height: this.props.myHeight,
+                        backgroundColor: this.props.myBgColour
+                       };
+          var circleTags = circleColours.map(function(color) {
+                           });
+          return <div style={styles}>
+                 </div>;
+        }
+      });
+      var circleColours = ["red","yellow","brown","blue","pink","purple"];
+      React.render(<CircleContainer myCircleColours={circleColours}/>, document.getElementById("circlecontainer"));
+      //React.render(<Circle myWidth"50px" myHeight="50px" myBgColour="black"/>, document.getElementById("circlecontainer"));
+    </script>
+  </body>
+</html>

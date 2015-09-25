@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset 'utf8'>
+    <script src="react.js"></script>
+    <script src="JSXTransformer.js"></script>
+    <title>React.js Grocery Cart</title>
+  </head>
+  <body>
+    <h1>Welcome to the React.js Grocery Store</h1> 
+    <div id="shoppingcart"></div>
+    <script type="text/jsx">
+      var Cart = React.createClass({
+        getInitialState: function() {
+          return {total_cost: 0};
+        },
+        addCost: function(amount) {
+          var cost = this.state.total_cost + amount;
+          this.setState({total_cost: cost});
+        },
+        subtractCost: function(amount) {
+          var cost = this.state.total_cost - amount;
+          this.setState({total_cost: cost});
+        },
+        render: function() {
+          var itemArr = this.props.inventory;
+          var itemTags = itemArr.map(function(item) {
+                          return <Item itemName={item.itemName} itemPrice={item.itemPrice}
+                                       addToCart={this.addCost} subtractFromCart={this.subtractCost}/>
+                         }.bind(this));
+          return <div>
+                  The Shopping Cart Total is ${this.state.total_cost}
+                  {itemTags}
+                 </div>
+        }
+      });
+      var Item = React.createClass({
+        getInitialState: function() {
+          return {backgroundColor: "pink"}
+        },
+        updateItem: function() {
+          if (this.state.backgroundColor == "pink") {
+            this.setState({backgroundColor: "blue"}); 
+            this.props.addToCart(this.props.itemPrice);
+          } else {
+            this.setState({backgroundColor: "pink"}); 
+            this.props.subtractFromCart(this.props.itemPrice);
+          };
+        },
+        render: function() {
+          var styles = {
+                        border: "1px black solid",
+                        width: "150px",
+                        height: "50px",
+                        backgroundColor: this.state.backgroundColor
+                       };
+          return <div style={styles} onClick={this.updateItem}>
+                  {this.props.itemName} ${this.props.itemPrice}
+                 </div>;
+        }
+      });
+      var inventoryArr = [{itemName: "Mac Mini", itemPrice: 500},
+                          {itemName: "Surface Pro", itemPrice: 900},
+                          {itemName: "Roku3", itemPrice: 90}
+                         ];
+      React.render(<Cart inventory={inventoryArr}/>,document.getElementById("shoppingcart"));
+    </script>
+  </body>
+</html>

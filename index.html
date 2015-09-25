@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset 'utf8'>
+    <script src="react.js"></script>
+    <script src="JSXTransformer.js"></script>
+    <title>React.js Playground</title>
+  </head>
+  <body>
+    <h1>Welcome to the React.js Playground</h1> 
+    <div id="greeting-1"></div>
+    <div id="greeting-2"></div>
+    <div id="greeting-3"></div>
+    // Make box component with props: width height bg-color
+    <div id="box-1"></div>
+    <div id="box-2"></div>
+    <div id="container"></div>
+    <div id="container-exercise"></div>
+    <script type="text/jsx">
+      var HelloWorld = React.createClass({
+        render: function() {
+          var styles = {color: "red", fontSize: "19px"};
+          return <div style={styles}>
+                    <div>Hello World</div>
+                    <br />
+                    <div>Hello CodeCore</div>
+                    <div>Hello {this.props.name}</div>
+                 </div>;;
+        }
+      });
+      //React.render(<HelloWorld name="Jeff" />, document.body);
+      ////React.render(<HelloWorld name="Jeff" />, document.getElementById("greeting-1"));
+      ////React.render(<HelloWorld name="Darryl" />, document.getElementById("greeting-2"));
+      ////React.render(<HelloWorld name="Brian" />, document.getElementById("greeting-3"));
+    </script>
+    <script type="text/jsx">
+      var Box = React.createClass({
+        render: function() {
+          var styles = {
+                        width: this.props.myWidth, 
+                        height: this.props.myHeight,
+                        backgroundColor: this.props.myBgColour
+                       };
+          return <div style={styles}>
+                 </div>;
+        }
+      });
+
+      var Container = React.createClass({
+        render: function() {
+          var styles = {width: "200px", height: "200px", backgroundColor: "red"};
+          var boxColors = ["red","yellow","brown","blue","pink","purple"];
+          var boxes     = boxColors.map(function(color) {
+                            return <Box myWidth="20px" myHeight="20px" myBgColour={color} />;
+                          });
+          return <div style={styles}>
+                  {boxes}
+                 </div>;
+        }
+      });
+
+      var Circle = React.createClass({
+        render: function() {
+          var styles = {
+                        borderRadius: "50%",
+                        width: "20px",
+                        height: "20px"
+                       };
+          return <div style={styles}>
+                 </div>;
+        }
+      });
+      //React.render(<Box myWidth="200px" myHeight="250px" myBgColour="teal" />, document.getElementById("box-1"));
+      //React.render(<Box myWidth="400px" myHeight="150px" myBgColour="turquoise" />, document.getElementById("box-2"));
+      React.render(<Container />, document.getElementById("container"));
+      //React.render(<Container />, document.getElementById("container-exercise"));
+    </script>
+    <script type="text/jsx">
+      var CircleContainer = React.createClass({
+        getInitialState: function() {
+          return {clickCount: 0};
+        },
+        //This function should actually be called from the Circle
+        updateClickCount: function(number) {
+          var newClickCount = this.state.clickCount + number;
+          this.setState({clickCount: newClickCount});
+        },
+        render: function() {
+          var styles       = {width: "200px", height: "200px", backgroundColor: "red"};
+          var circleColors = this.props.myCircleColours;
+          var circleTags   = circleColors.map(function(color) {
+                                return <Circle myWidth="20px" 
+                                              myHeight="20px" 
+                                              myBgColour={color} 
+                                              updateClickCount={this.updateClickCount}/>;
+                             }.bind(this));
+          return <div style={styles}>
+                   {circleTags}
+                 </div>;
+        }
+      });
+
+      var Circle = React.createClass({
+        render: function() {
+          var circleColours = ["white","blue","orange","teal","magenta","black","grey"];
+          var styles = {
+                        borderRadius: "50%",
+                        width: this.props.myWidth,
+                        height: this.props.myHeight,
+                        backgroundColor: this.props.myBgColour
+                       };
+          var circleTags = circleColours.map(function(color) {
+                           });
+          return <div style={styles}>
+                 </div>;
+        }
+      });
+      var circleColours = ["red","yellow","brown","blue","pink","purple"];
+      React.render(<CircleContainer myCircleColours={circleColours}/>, document.getElementById("container-exercise"));
+    </script>
+    <!-- ################################################################################### -->
+    <script type="text/jsx">
+      var Box = React.createClass({
+        //Reserved Funcion. Sets initial state of some attributes
+        getInitialState: function() {
+          return {myBgColour: "green"};
+        },
+        //Reserved Function. Runs immediately
+        componentDidMount: function() {
+          console.log("Component is ready and mounted!");
+          //setTimeout(this.changeColor, 5000);
+          //setInterval(this.shiftColor, 1000);
+        },
+        //User-defined function
+        changeColor: function() {
+          this.setState({myBgColour: "blue"});
+        },
+        shiftColor: function() {
+          if (this.state.myBgColour === "red") {
+            this.setState({myBgColour: "blue"});
+          } else {
+            this.setState({myBgColour: "red"});
+          };
+        },
+        alertMe: function() {
+          console.log("You got clicked");
+          console.log("Toggling Color");
+          this.shiftColor();
+        },
+        //Reserved Function - renders the component
+        render: function() {
+          var styles = {
+                        width: this.props.myWidth, 
+                        height: this.props.myHeight,
+                        backgroundColor: this.state.myBgColour
+                       };
+          return <div style={styles} onClick={this.alertMe}>
+                 </div>;
+        }
+      });
+
+      var Container = React.createClass({
+        render: function() {
+          var styles = {width: "200px", height: "200px", backgroundColor: "red"};
+          var boxColors = ["red","yellow","brown","blue","pink","purple"];
+          var boxes     = boxColors.map(function(color) {
+                            return <Box myWidth="20px" myHeight="20px" myBgColour={color} />;
+                          });
+          return <div style={styles}>
+                  {boxes}
+                 </div>;
+        }
+      });
+
+      React.render(<Box myWidth="400px" myHeight="150px" />, document.getElementById("box-2"));
+      var Circle = React.createClass({
+        getInitialState: function() {
+          return {clickCount: 0};
+        },
+        render: function() {
+          var circleColours = ["white","blue","orange","teal","magenta","black","grey"];
+          var styles = {
+                        borderRadius: "50%",
+                        width: this.props.myWidth,
+                        height: this.props.myHeight,
+                        backgroundColor: this.props.myBgColour
+                       };
+          var circleTags = circleColours.map(function(color) {
+                           });
+          return <div style={{color: "white"}}>
+                  You clicked on {this.state.clickCount} circles.
+                 </div>;
+        }
+      });
+      var circleColours = ["red","yellow","brown","blue","pink","purple"];
+      React.render(<Container myCircleColours={circleColours}/>, document.getElementById("container-exercise"));
+ 
+    </script>
+  </body>
+</html>
