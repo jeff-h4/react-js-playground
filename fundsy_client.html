@@ -39,7 +39,7 @@
       });
       var Campaign = React.createClass({
         getInitialState: function() {
-          return {detailedDisplay: "false",
+          return {displayChildren: "false",
                   campaign: {},
                   rewards: [],
                   comments: []}
@@ -49,7 +49,7 @@
             method: "GET",
             url: "http://localhost:3000/campaigns/" + this.props.id + ".json",
             success: function(data) {
-              this.setState({detailedDisplay: "true",
+              this.setState({displayChildren: "true",
                              campaign: data.campaign, 
                              rewards: data.rewards,
                              comments: data.comments});
@@ -58,11 +58,14 @@
         },
         render: function(){
           var rewardTags = this.state.rewards.map(function(rewardObj){
-                              return <Reward description={rewardObj.description} amount={rewardObj.amount} />
-                            });
+                              return <Reward description={rewardObj.description} 
+                                             amount={rewardObj.amount} 
+                                             displaySetting={this.state.displayChildren}/>
+                            }.bind(this));
           var commentTags = this.state.comments.map(function(commentObj){
-                              return <Comment body={commentObj.body} />
-                            });
+                              return <Comment body={commentObj.body} 
+                                              displaySetting={this.state.displayChildren}/>
+                            }.bind(this));
           return  <div>
                     <h2>
                       <a id={this.props.id} href="javascript:void(0);" onClick={this.campaignGotClicked}>
@@ -77,8 +80,9 @@
       });
       var Reward = React.createClass({
         render: function() {
+          var styles = {display: this.props.displaySetting}
           return  <div>
-                    <p>
+                    <p style={styles}>
                       Reward: {this.props.description} for ${this.props.amount}
                     </p>
                   </div>
@@ -86,7 +90,8 @@
       });
       var Comment = React.createClass({
         render: function() {
-          return  <div>
+          var styles = {display: this.props.displaySetting}
+          return  <div style={styles}>
                       Comment: {this.props.body}
                   </div>
         }
